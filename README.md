@@ -1,9 +1,14 @@
-# ENG-220-Group-004
+\title{ENG-220 Group 004 Dashboard Project}
+\author{Group Members}
+\date{}
 
-This is our group repository to create a dashboard for our project
-The members in our group:
-Conner Cook (Team Manager)
-Cameron Prewitt
-Garrett Templeton
-Cael Drew
-Izzy Adegbenro
+\maketitle
+
+\section*{Group Members}
+\begin{itemize}
+    \item Conner Cook (Team Manager)
+    \item Cameron Prewitt
+    \item Garrett Templeton
+    \item Cael Drew
+    \item Izzy Adegbenro
+\end{itemize}
