@@ -17,15 +17,22 @@ if uploaded_file is not None:
     raw_data['Timestamp'] = pd.to_datetime(raw_data['Timestamp'], errors='coerce')
     raw_data.dropna(subset=['Timestamp'], inplace=True)  # Remove invalid timestamps
 
-    # Clean numeric columns (remove non-numeric characters if necessary)
-    for col in raw_data.columns[1:]:
-        raw_data[col] = pd.to_numeric(raw_data[col], errors='coerce')
+    # Replace "NR" with "none" in all columns
+    raw_data.replace("NR", "none", inplace=True)
 
-    # Drop rows with all NaN values in numeric columns
-    raw_data.dropna(subset=raw_data.columns[1:], how='all', inplace=True)
+    # Convert numeric columns, keeping zeros
+    numeric_columns = raw_data.columns[1:]
+    for col in numeric_columns:
+        raw_data[col] = pd.to_numeric(raw_data[col], errors='coerce')  # Keeps zeros, converts invalid to NaN
 
     # Aggregate data to one point per day (mean values)
     daily_data = raw_data.set_index('Timestamp').resample('D').mean().reset_index()
+
+    # Merge non-numeric data back into the aggregated dataset
+    non_numeric = raw_data.set_index('Timestamp').resample('D').first().reset_index()
+    for col in non_numeric.columns:
+        if col not in daily_data.columns:
+            daily_data[col] = non_numeric[col]
 
     # Display cleaned and aggregated data
     st.write("### Data Preview (Daily Aggregated)")
@@ -65,5 +72,6 @@ if uploaded_file is not None:
     st.write("Tip: Data has been aggregated to one point per day for better performance.")
 else:
     st.info("Please upload a CSV file to get started.")
+
 
 
