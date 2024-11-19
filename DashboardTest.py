@@ -55,6 +55,15 @@ if uploaded_file is not None:
             ax.set_title(f"{y_column} vs {x_column} (Scatter Plot)")
 
         elif graph_type == "Bar":
-            ax.bar(d
+            ax.bar(daily_data[x_column], daily_data[y_column])
+            ax.set_title(f"{y_column} vs {x_column} (Bar Chart)")
+
+        ax.set_xlabel(x_column)
+        ax.set_ylabel(y_column)
+        st.pyplot(fig)
+
+    st.write("Tip: Data has been aggregated to one point per day for better performance.")
+else:
+    st.info("Please upload a CSV file to get started.")
 
 
