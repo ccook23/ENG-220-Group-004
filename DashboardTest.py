@@ -13,19 +13,26 @@ if uploaded_file is not None:
     raw_data = pd.read_csv(uploaded_file, header=1)  # Skip the first row
     raw_data.rename(columns={raw_data.columns[0]: "Timestamp"}, inplace=True)
 
-    # Display cleaned data
-    st.write("### Data Preview")
-    st.dataframe(raw_data)
+    # Ensure Timestamp is datetime
+    raw_data['Timestamp'] = pd.to_datetime(raw_data['Timestamp'], errors='coerce')
+    raw_data.dropna(subset=['Timestamp'], inplace=True)  # Remove invalid timestamps
+
+    # Aggregate data to one point per day (e.g., mean values)
+    daily_data = raw_data.set_index('Timestamp').resample('D').mean().reset_index()
+
+    # Display cleaned and aggregated data
+    st.write("### Data Preview (Daily Aggregated)")
+    st.dataframe(daily_data)
 
     # Dropdown for selecting columns
-    columns = raw_data.columns.tolist()
+    columns = daily_data.columns.tolist()
     x_column = st.selectbox("Select X-axis column", columns, index=0)  # Default to "Timestamp"
-    y_column = st.selectbox("Select Y-axis column", columns, index=1)  # Default to second column
+    y_column = st.selectbox("Select Y-axis column", columns[1:], index=0)  # Skip "Timestamp"
 
     # Dropdown for graph type
     graph_type = st.selectbox(
         "Select Graph Type",
-        ["Line", "Scatter", "Bar", "Pie"]
+        ["Line", "Scatter", "Bar"]
     )
 
     # Plot button
@@ -33,36 +40,22 @@ if uploaded_file is not None:
         fig, ax = plt.subplots()
 
         if graph_type == "Line":
-            ax.plot(raw_data[x_column], raw_data[y_column], marker='o')
+            ax.plot(daily_data[x_column], daily_data[y_column], marker='o')
             ax.set_title(f"{y_column} vs {x_column} (Line Plot)")
 
         elif graph_type == "Scatter":
-            ax.scatter(raw_data[x_column], raw_data[y_column])
+            ax.scatter(daily_data[x_column], daily_data[y_column])
             ax.set_title(f"{y_column} vs {x_column} (Scatter Plot)")
 
         elif graph_type == "Bar":
-            ax.bar(raw_data[x_column], raw_data[y_column])
+            ax.bar(daily_data[x_column], daily_data[y_column])
             ax.set_title(f"{y_column} vs {x_column} (Bar Chart)")
 
-        elif graph_type == "Pie":
-            if len(raw_data[x_column].unique()) <= 10:  # Limit to 10 unique categories for readability
-                plt.pie(
-                    raw_data[y_column],
-                    labels=raw_data[x_column],
-                    autopct='%1.1f%%',
-                    startangle=90,
-                )
-                plt.title(f"{y_column} (Pie Chart)")
-            else:
-                st.error("Pie chart requires fewer unique categories in the X-axis.")
+        ax.set_xlabel(x_column)
+        ax.set_ylabel(y_column)
+        st.pyplot(fig)
 
-        if graph_type != "Pie":
-            ax.set_xlabel(x_column)
-            ax.set_ylabel(y_column)
-            st.pyplot(fig)
-        else:
-            st.pyplot(plt)
-
-    st.write("Tip: Ensure the selected columns are numeric for meaningful plots.")
+    st.write("Tip: Data has been aggregated to one point per day for better performance.")
 else:
     st.info("Please upload a CSV file to get started.")
+
