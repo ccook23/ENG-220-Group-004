@@ -17,8 +17,12 @@ if uploaded_file is not None:
     raw_data['Timestamp'] = pd.to_datetime(raw_data['Timestamp'], errors='coerce')
     raw_data.dropna(subset=['Timestamp'], inplace=True)  # Remove invalid timestamps
 
+    # Select numeric columns for aggregation
+    numeric_columns = raw_data.select_dtypes(include='number')
+    numeric_columns['Timestamp'] = raw_data['Timestamp']  # Re-add Timestamp for grouping
+
     # Aggregate data to one point per day (e.g., mean values)
-    daily_data = raw_data.set_index('Timestamp').resample('D').mean().reset_index()
+    daily_data = numeric_columns.set_index('Timestamp').resample('D').mean().reset_index()
 
     # Display cleaned and aggregated data
     st.write("### Data Preview (Daily Aggregated)")
@@ -58,4 +62,5 @@ if uploaded_file is not None:
     st.write("Tip: Data has been aggregated to one point per day for better performance.")
 else:
     st.info("Please upload a CSV file to get started.")
+
 
