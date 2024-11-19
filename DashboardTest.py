@@ -17,12 +17,15 @@ if uploaded_file is not None:
     raw_data['Timestamp'] = pd.to_datetime(raw_data['Timestamp'], errors='coerce')
     raw_data.dropna(subset=['Timestamp'], inplace=True)  # Remove invalid timestamps
 
-    # Select numeric columns for aggregation
-    numeric_columns = raw_data.select_dtypes(include='number')
-    numeric_columns['Timestamp'] = raw_data['Timestamp']  # Re-add Timestamp for grouping
+    # Clean numeric columns (remove non-numeric characters if necessary)
+    for col in raw_data.columns[1:]:
+        raw_data[col] = pd.to_numeric(raw_data[col], errors='coerce')
 
-    # Aggregate data to one point per day (e.g., mean values)
-    daily_data = numeric_columns.set_index('Timestamp').resample('D').mean().reset_index()
+    # Drop rows with all NaN values in numeric columns
+    raw_data.dropna(subset=raw_data.columns[1:], how='all', inplace=True)
+
+    # Aggregate data to one point per day (mean values)
+    daily_data = raw_data.set_index('Timestamp').resample('D').mean().reset_index()
 
     # Display cleaned and aggregated data
     st.write("### Data Preview (Daily Aggregated)")
@@ -52,15 +55,6 @@ if uploaded_file is not None:
             ax.set_title(f"{y_column} vs {x_column} (Scatter Plot)")
 
         elif graph_type == "Bar":
-            ax.bar(daily_data[x_column], daily_data[y_column])
-            ax.set_title(f"{y_column} vs {x_column} (Bar Chart)")
-
-        ax.set_xlabel(x_column)
-        ax.set_ylabel(y_column)
-        st.pyplot(fig)
-
-    st.write("Tip: Data has been aggregated to one point per day for better performance.")
-else:
-    st.info("Please upload a CSV file to get started.")
+            ax.bar(d
 
 
