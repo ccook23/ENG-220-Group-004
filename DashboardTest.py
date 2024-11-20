@@ -18,6 +18,9 @@ if os.path.exists(image_path):
     st.image(image_path, caption="Water Districts", use_column_width=True)
 else:
     st.warning("Water Districts.png image not found. Please ensure the image is in the same directory as the app.")
+
+st.write(f"Looking for image at: {image_path}")
+
 # Check for district folders and list them
 available_folders = [folder for folder in district_folders if os.path.exists(os.path.join(base_path, folder))]
 
