@@ -4,7 +4,7 @@ import matplotlib.pyplot as plt
 import os
 
 # Title of the app
-st.title("District Data Visualization App")
+st.title("Sample Water Data in New Mexico Districts")
 
 st.image("WaterDistricts.png", caption="Water Districts in New Mexico")
 
