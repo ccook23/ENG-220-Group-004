@@ -2,30 +2,8 @@ import streamlit as st
 import pandas as pd
 import matplotlib.pyplot as plt
 import os
-from PIL import Image
 
-# Title of the app
-st.title("District Data Visualization App")
-
-# Get the absolute path to the current script directory
-base_path = os.path.dirname(os.path.abspath(__file__))
-
-# Path to the image
-image_name = "Water Districts.png"
-image_path = os.path.join(base_path, image_name)
-
-# Display the image
-st.subheader("Water District Map")
-if os.path.exists(image_path):
-    st.image(image_path, caption="Water Districts", use_column_width=True)
-else:
-    st.warning("Water Districts.png image not found. Please upload the image below.")
-    # Allow user to upload the image if not found
-    uploaded_image = st.file_uploader("Upload the Water Districts.png image", type=["png"])
-    if uploaded_image:
-        with open(image_name, "wb") as f:
-            f.write(uploaded_image.getbuffer())
-        st.success(f"{image_name} uploaded successfully! Reload the app to view it.")
+st.image("Water Districts.png", caption="Water Districts in New Mexico")
 
 # Check for district folders and list them
 available_folders = [folder for folder in district_folders if os.path.exists(os.path.join(base_path, folder))]
