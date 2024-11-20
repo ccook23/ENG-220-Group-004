@@ -3,7 +3,14 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import os
 
+# Title of the app
+st.title("District Data Visualization App")
+
 st.image("WaterDistricts.png", caption="Water Districts in New Mexico")
+
+# Path to folders (assumes the script and district folders are in the same directory)
+base_path = os.getcwd()  # Current working directory
+district_folders = [f"District {i}" for i in range(1, 8)]
 
 # Check for district folders and list them
 available_folders = [folder for folder in district_folders if os.path.exists(os.path.join(base_path, folder))]
@@ -84,8 +91,3 @@ else:
             st.pyplot(fig)
 
         st.write("Tip: Data has been aggregated to one point per day for better performance.")
-
-
-
-
-
