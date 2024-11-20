@@ -2,11 +2,9 @@ import streamlit as st
 import pandas as pd
 import matplotlib.pyplot as plt
 import os
-from PIL import Image
+from image_loader import render_image
 
-image = Image.open('Water Districts.png')
-
-st.image(image, caption='Sunrise by the mountains')
+render_image("Water Districts.png")
 
 # Check for district folders and list them
 available_folders = [folder for folder in district_folders if os.path.exists(os.path.join(base_path, folder))]
