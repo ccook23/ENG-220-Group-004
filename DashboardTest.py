@@ -7,17 +7,17 @@ from PIL import Image  # For image handling
 # Title of the app
 st.title("District Data Visualization App")
 
-# Path to folders and image (assumes the script and related files are in the same directory)
-base_path = os.getcwd()
-district_folders = [f"District {i}" for i in range(1, 8)]
+# Get the absolute path to the current script directory
+base_path = os.path.dirname(os.path.abspath(__file__))
+
+# Path to the image
 image_path = os.path.join(base_path, "Water Districts.png")
 
-# Display the image at the top if it exists
+# Display the image if it exists
 if os.path.exists(image_path):
     st.image(image_path, caption="Water Districts", use_column_width=True)
 else:
-    st.warning("Water Districts.png image not found in the current directory.")
-
+    st.warning("Water Districts.png image not found. Please ensure the image is in the same directory as the app.")
 # Check for district folders and list them
 available_folders = [folder for folder in district_folders if os.path.exists(os.path.join(base_path, folder))]
 
