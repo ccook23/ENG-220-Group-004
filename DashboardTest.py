@@ -3,7 +3,7 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import os
 
-st.image("Water Districts.png", caption="Water Districts in New Mexico")
+st.image(Water Districts.png, caption="Water Districts in New Mexico")
 
 # Check for district folders and list them
 available_folders = [folder for folder in district_folders if os.path.exists(os.path.join(base_path, folder))]
