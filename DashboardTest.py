@@ -11,15 +11,27 @@ st.title("District Data Visualization App")
 base_path = os.path.dirname(os.path.abspath(__file__))
 
 # Path to the image
-image_path = os.path.join(base_path, "Water Districts.png")
+image_name = "Water Districts.png"
+image_path = os.path.join(base_path, image_name)
 
-# Display the image if it exists
+# Debugging: Display the path being used to find the image
+st.write(f"Searching for the image at: {image_path}")
+
+# Check if the image exists
 if os.path.exists(image_path):
+    # Load and display the image
     st.image(image_path, caption="Water Districts", use_column_width=True)
 else:
-    st.warning("Water Districts.png image not found. Please ensure the image is in the same directory as the app.")
+    st.warning("Water Districts.png image not found. Please upload the image.")
+    
+    # Allow user to upload the image if not found
+    uploaded_image = st.file_uploader("Upload the Water Districts.png image", type=["png"])
+    if uploaded_image:
+        # Save the uploaded file in the same directory as the script
+        with open(image_name, "wb") as f:
+            f.write(uploaded_image.getbuffer())
+        st.success(f"{image_name} uploaded successfully! Reload the app to view it.")
 
-st.write(f"Looking for image at: {image_path}")
 
 # Check for district folders and list them
 available_folders = [folder for folder in district_folders if os.path.exists(os.path.join(base_path, folder))]
