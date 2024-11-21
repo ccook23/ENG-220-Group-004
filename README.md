@@ -8,4 +8,4 @@
 - **Izzy Adegbenro**
 
 ## Dashboard
-[Link](https://eng-220-group-004-dashboard.streamlit.app/) 
+**[Link](https://eng-220-group-004-dashboard.streamlit.app/)**
