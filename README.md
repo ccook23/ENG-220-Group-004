@@ -9,3 +9,6 @@
 
 ## Dashboard
 **[Link](https://eng-220-group-004-dashboard.streamlit.app/)**
+
+## Final Dashboard Video
+**[Link](https://youtu.be/FpB1BzLFbZk)**
